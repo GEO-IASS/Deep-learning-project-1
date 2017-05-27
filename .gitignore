@@ -1,0 +1,7 @@
+*.aux
+*.gz
+*.sty
+*.out
+*.blg
+*.toc
+*.bbl

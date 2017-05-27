@@ -1,0 +1,115 @@
+\RequirePackage{etex}
+\RequirePackage{fix-cm} % For custom font shaping
+
+% Document class
+\documentclass[pdftex, 11pt, a4paper, oneside, english]{memoir}
+
+% Page styling
+\let\footruleskip\undefined
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% English language package
+\usepackage[english]{babel}
+
+% UTF-8 characters
+\usepackage[utf8]{inputenc}
+
+% Package for dummy text
+\usepackage{lipsum}
+
+%Packages for writing algorithms nicely
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Colors for chapters and table of content
+\usepackage[table,xcdraw]{xcolor}
+\definecolor{ThemeColor}{RGB}{51, 102, 255} % Blue
+\definecolor{BlackColor}{RGB}{0, 0, 0} % Black
+
+% Table packages
+% Merge cells i tables
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{tabularx}
+
+% PDF propeties (fx. hyperlinks, pdftitle)
+\usepackage[hyphens]{url}
+\usepackage[bookmarks=true,bookmarksnumbered=true,citecolor=black,colorlinks=true,hyperfigures=true,hyperfootnotes=true,hyperindex=true,linkcolor=black,urlcolor=blue]{hyperref}
+
+% BibTeX = bibliography
+% ALWAYS USE \citep{} or something like:
+% \citep[see this baws article]{fooArticle}
+%\usepackage[semicolon,authoryear,round]{natbib}
+%\bibliographystyle{plainnat}
+%vancover standard 
+\usepackage[square,numbers]{natbib}
+\bibliographystyle{abbrvnat}
+
+%for including pdfs in the report
+\usepackage{pdfpages}
+% Package for editing captions. Fx for figures and code listings
+\usepackage[textfont={footnotesize,sl}]{caption}
+
+%Package for MATLAB code
+\usepackage[framed, numbered]{mcode}
+
+% Package for more elegant math
+\usepackage{amsmath}
+\usepackage{xfrac} % for \sfrac command
+
+
+% Styles
+\input{style/chapter}
+\input{style/headerFooter}
+\input{style/figure}
+\input{style/todos}
+\input{style/code}
+\input{style/customCmds}
+\input{style/tables}
+
+
+% Geometry for frontpage
+\usepackage{geometry}
+
+% For traceability matrix
+\usepackage{longtable}
+\usepackage{rotating}
+
+\usepackage{subcaption}
+\usepackage{tabularx}
+
+
+\AtBeginDocument{\renewcommand\contentsname{Contents \vspace{-1.5em}}}
+
+\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+
+
+
+\begin{document}
+
+	\begin{titlingpage}
+		% Frontpage goes here
+		\include{chapter/Frontpage}
+	\end{titlingpage}
+
+    % Table of contents
+	\tableofcontents*
+	
+	\include{chapter/introduction}
+	\include{chapter/theory}
+	\include{chapter/implementation}
+	\include{chapter/results}
+    \include{chapter/Discussion}
+    \include{chapter/Conclusion}
+    \include{chapter/Q1}
+	\bibliography{bibliografi}% Selects .bib file AND prints bibliography
+
+%	\addtocontents{toc}{\protect\setcounter{tocdepth}1}
+%	\addtocontents{toc}{\setcounter{tocdepth}{1}}
+    
+    % Appendix
+    \input{style/appendix} % Changes chapter and section style and toc adding
+    
+
+\end{document}

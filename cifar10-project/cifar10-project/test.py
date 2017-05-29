@@ -133,10 +133,11 @@ x_image = tf.reshape(x, [-1, img_size, img_size, num_channels])
 
 ## FIRST LAYER ##
 conv1 = conv_layer(x_image, num_channels, 32, "conv1")
-tf.summary.image('inputConv1', x_image, 3)
+
+
 ## SECOND LAYER ##
 conv2 = conv_layer(conv1, 32, 64, "conv2")
-tf.summary.image('inputconv2', x_image, 3)
+
 
 h_pool2_flat = tf.reshape(conv2, [-1, 8 * 8 * 64])
 
@@ -223,7 +224,7 @@ for i in range(500):
     if i%50 == 0:
         train_accuracy = accuracy.eval(feed_dict={x:batch_xs, y_true: batch_ys, keep_prob: 1.0})
         print("step %d, training accuracy %g"%(i, train_accuracy))
-        s = sess.run(merged_summary, feed_dict={x: batch_xs, y: batch_ys, y_true: batch_ys, keep_prob: 0.5})
+        s = sess.run(merged_summary, feed_dict={x: batch_xs, y_true: batch_ys, keep_prob: 0.5})
         writer.add_summary(s, i)
     train_step.run(feed_dict={x: batch_xs, y_true: batch_ys, keep_prob: 0.5})
 

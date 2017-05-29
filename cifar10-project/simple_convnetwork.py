@@ -4,8 +4,9 @@ import cifar10
 from cifar10 import img_size, num_channels, num_classes
 
 # Hyperparameters
-num_epochs=1
-l2_regularization_penalty = 0.01
+num_epochs=25
+l2_regularization_penalty = 0.1
+drop_out = 0.5
 learning_rate=0.001
 decay_rate_1_moment=0.9
 decay_rate_2_moment=0.999
@@ -157,9 +158,9 @@ with tf.name_scope("accuracy"):
 
 #Tensorboard
 
-tf.summary.scalar("cross_entropy", loss)
-training_acc = tf.summary.scalar("training_accuracy", accuracy)
-test_acc = tf.summary.scalar("test_accuracy", accuracy)
+loss_summary = tf.summary.scalar("loss", loss)
+training_summary  = tf.summary.scalar("training_accuracy", accuracy)
+validation_summary  = tf.summary.scalar("validation_accuracy", accuracy)
 
 
 # Start training
@@ -167,32 +168,59 @@ sess = tf.InteractiveSession()
 sess.run(tf.global_variables_initializer())
 
 merged_summary = tf.summary.merge_all()
-writer = tf.summary.FileWriter("/Users/TorbenWVogt/Deep-learning-project/GraphData/Summary")
+writer = tf.summary.FileWriter("/GraphData/Summary")
 writer.add_graph(sess.graph)
 
-for i in range(int((len(images_train)/train_batch_size) * num_epochs)):
-  batch = random_batch()
-  if i%100 == 0:
-    if i % (int(len(images_train)/train_batch_size)) == 0:   
-      print("%d th epoch"%(i/(len(images_train)/train_batch_size)))
+for i in range(0,4):
+  if i == 0:
+    writer = tf.summary.FileWriter("/GraphData/Summary1")
+    l2_regularization_penalty = 0.1
+        #learning_rate=0.001
+    #drop_out = 0.5
+  if i == 1:
+    writer = tf.summary.FileWriter("/GraphData/Summary2")
+    l2_regularization_penalty = 0.05
+    #learning_rate=0.0001
+    #drop_out=0.4
+  if i == 2:
+    writer = tf.summary.FileWriter("/GraphData/Summary3")
+    l2_regularization_penalty = 0.2
+    #learning_rate=0.01
+    #drop_out=0.3
+  if i == 3:
+    writer = tf.summary.FileWriter("/GraphData/Summary4")
+    l2_regularization_penalty = 0.3
+    #learning_rate=0.1
+    #drop_out=0.6
+  print(l2_regularization_penalty)
+  for i in range(int((len(images_train)/train_batch_size) * num_epochs)):
+    batch = random_batch()
+    if i%100 == 0:
+      if i % (int(len(images_train)/train_batch_size)) == 0:   
+        print("%d th epoch"%(i/(len(images_train)/train_batch_size)))
+        
+      #Log the cost
+      cost_val, cost_summ = sess.run(
+        [loss, loss_summary],
+        feed_dict={x: batch[0], y_true: batch[1], keep_prob: 1.0})
+      writer.add_summary(cost_summ, i)
+
+      # To log training accuracy.
+      train_acc, train_summ = sess.run(
+          [accuracy, training_summary],
+          feed_dict={x : batch[0], y_true : batch[1], keep_prob: 1.0})
+      writer.add_summary(train_summ, i)
+  
+      # To log validation accuracy.
+      valid_acc, valid_summ = sess.run(
+          [accuracy, validation_summary],
+          feed_dict={x : images_test, y_true : labels_test, keep_prob: 1.0})
+      writer.add_summary(valid_summ, i)
       
-    # train_accuracy = train_accuracy.eval(feed_dict={x:batch[0], y_true: batch[1], keep_prob: 1.0})
-    # print("step %d, training accuracy %g"%(i, train_accuracy))
-    print (i)
-
-    # To log training accuracy.
-    train_acc, train_summ = sess.run(
-        [accuracy, training_acc],
-        feed_dict={x : batch[0], y_true : batch[1], keep_prob: 1.0})
-    writer.add_summary(train_summ, i)
-
-    # To log validation accuracy.
-    valid_acc, test_summ = sess.run(
-        [accuracy, merged_summary],
-        feed_dict={x : images_test, y_true : labels_test, keep_prob: 1.0})
-    writer.add_summary(test_summ, i)
-
-  train_step.run(feed_dict={x: batch[0], y_true: batch[1], keep_prob: 0.5})
+      print("step %d, training accuracy %g"%(i, train_acc))
+      print("step %d, validation accuracy %g"%(i, valid_acc))
+        
+    train_step.run(feed_dict={x: batch[0], y_true: batch[1], keep_prob: drop_out})
 
 is_training = False
 #Final validation accuracy

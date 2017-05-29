@@ -75,7 +75,7 @@ y_true = tf.placeholder(tf.float32, [None, num_classes])
 # First layer - compute 32 features for each 3 x3 patch
 # [ 3, 3, num_channels, 32] is [3x3, input_channels, output_cannels]
 
-W_conv1 = weight_variable([3, 3, num_channels, 32])
+W_conv1 = weight_variable([5, 5, num_channels, 32])
 b_conv1 = bias_variable([32])
 tf.summary.histogram("W1", W_conv1)
 tf.summary.histogram("b1", b_conv1)
@@ -97,7 +97,7 @@ with tf.name_scope("conv1"):
 # Second convolutional layer - 3x3 patch
 # [3, 3, 32, 64] 64 features for each 3x3 patch
 
-W_conv2 = weight_variable([3, 3, 32, 64])
+W_conv2 = weight_variable([5, 5, 32, 64])
 b_conv2 = bias_variable([64])
 tf.summary.histogram("W2", W_conv2)
 tf.summary.histogram("b2", b_conv2)

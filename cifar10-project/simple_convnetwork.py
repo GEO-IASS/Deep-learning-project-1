@@ -4,7 +4,7 @@ import cifar10
 from cifar10 import img_size, num_channels, num_classes
 
 # Hyperparameters
-num_epochs=25
+num_epochs=20
 l2_regularization_penalty = 0.1
 drop_out = 0.5
 learning_rate=0.001

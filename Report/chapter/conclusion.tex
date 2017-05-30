@@ -1,2 +1,13 @@
 \chapter{Conclusion}
 \label{chp:conc}
+
+\section{Convolutional network layers}
+
+Traditional neural network with fully-connected layers does not perform well with images classification. This is because they create the number of weights due to the size of the image. For instance if an input image is 800x600x3 (wide, height, depth) the number of weights would be $800 * 600 * 3 = 1,440,000$. Due to the large number of parameters, it is easy to se that this is wasteful technique to work with images and furthermore it will lead to an overfitting of the input images. On the other hand a
+Convolutional nerual network also called \emph{CNN} would be a better solution when working on images classification becuase it assumes that the input is an iamge or on the same form. The power in CNN is that the layers are three dimensional and they neurons can share weights and bias values. This reduces the amount of parameters significantly. The CNN consist of three different layers, namely a \emph{convolutional layer}, a \emph{pooling layer} and a \emph{fully-connected layer}. These three layers will be described in the following sections.
+ 
+\subsection{Convolutional layer}
+
+\subsection{Pooling layer}
+
+\subsection{Fully-connected layer}

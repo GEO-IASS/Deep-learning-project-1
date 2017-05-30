@@ -1,2 +1,43 @@
 \chapter{Implementation}
 \label{chp:imp}
+
+\section{Architecture}
+The implemented architecture is illustrated in figure \ref{fig:conv_arch}. The inputted images are size 32x32. A convolutional layers is first applied following a ReLu activations function and max pooling. Then a second convolutional layer, following a ReLu activation and max pooling. At last two fully connected layers are applied with a dropout layer before the last layer.
+
+\myFigure{conv_architecture.png}{Architecture of the Convolutional network}{fig:conv_arch}{1} 
+
+\section{Tensorflow}
+Tensorflow is the chosen framework for implementing this convolutional network. 
+
+Furthermore Tensorboard is used as a visualization tool for plotting different metrics. Tensorboard is a part of the Tensorflow suite. 
+
+\section{Training}
+The Cifar10 dataset contains 50.000 training images and 10.000 validation images. Training is done on the training images in batches. 
+
+For weight initialization a simple approach is used. The weights are small numbers drawn from a normal distribution. The normal distribution assures symmetry breaking. For bias initialization a small constant value of 0.1 is simply used to ensure that ReLu activations functions fires.
+
+To find weights that minimizes the loss function, the ADAM algorithm is used. For calculating the loss a Softmax classifier is used.
+
+The training is executed on the CPUs of two stationary computers. This sets some boundary on complexity of the networks and epochs to run. For this project it was estimated feasible to run 20 epochs. For every 1/10th epoch the loss value, training and test accuracy is logged using Tensorboard.
+
+\section{Visualization and tunning hyperparameters}
+Different hyperparameters are used when training the networks. In this project it was chosen to look specifically at learning rate, L2 regularization penalty and dropout rate. Tensorboard is used for visualization to resonate about the evaluated hyperparameters.
+
+\subsection{Learning rate}
+The learning rate is first set to the default for the AdamOptimizer specified for the Tensorflow implementation. This is specified at 0.001 \todo{Do cite}. To evaluate the learning rate, the loss is logged in Tensorboard. Looking at this visualization it can be considered whether the learning rate should be lower or higher.
+
+
+\subsection{L2 penalty}
+First a sanity check was done for L2 penalty. First the value was set to 0.1 and after just one epoch it was obvious that the regularization was overwhelming the data loss. The regularization loss approximately contributed with $98.5\%$ of the total loss. By running more epochs it was also obvious that only the regularization was minimized because no better accuracy was achieved.
+
+For the choosing among different L2 penalty smaller values with deemed more feasible was chosen. A L2 penalty of 0.001, 0.0001 and 0.00001 was evaluated. To evaluate how these performed the training and validation accuracy was logged in Tensorboard to visualize the difference. By looking at the gap between training and validation accuracy it can be seen whether the network is overfitting for the training data.
+
+\subsection{Dropout}
+Dropout is implemented to activate a neuron only with some probability when training. Dropout values between 0,1 therefore makes sense for this.´and 0.5 is a reasonable default value. Values in this range is there evaluated.
+
+Similar to L2 penalty the gap between training and validation accuracy can be used to asses the dropout value. 
+
+
+
+
+

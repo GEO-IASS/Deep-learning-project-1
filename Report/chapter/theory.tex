@@ -26,6 +26,15 @@ Hyperparameters are variables set before running one's neural network. They are 
 The learning rate is how quickly a network replaces old beliefs with new ones. An example could be a child learning about cars. If the first 10 cars the child sees are red, then it will believe cars are red and therefore look for red when needing to identify a car. If the child then begins seeing blue cars, then the learning rate determines how fast the child realizes that the red colour is not the most important characteristic of a car. A high learning rate results in fast realization, meaning the network will quickly change its mind. So while one would want a network that quickly can learn new characteristics, it is noteworthy that the learning rate can also be too high, which would result in fluctuating beliefs, and not make the model very precise. 
 
 \subsection{L2 regularization}
+Regularization techniques generally prevents overfitting of the training dataset. L2 regularization is one of the most common techniques. The equation for calculating L2 regularization loss for every weight in the network can be written as illustrated in (6.1). 
+
+\begin{equation}
+\dfrac{1}{2} * \lambda * \omega^2
+\end{equation}
+
+It can be read from the equation that $\omega^2$ ensures that high peaky weights are penalized heavier than diffuse weights. L2 regularization therefore encourages utilizing all inputs even though it might give the same data loss as only utilizing few inputs. Experience shows that diffuse weights yields a better result \citep{LC_cs231n}.
+
+When using L2 regularization the calculated regularization loss is added to the data loss. Its important not to overwhelm the data loss, so that the gradient primarily comes from the regularization loss instead of the data loss.
 
 
 

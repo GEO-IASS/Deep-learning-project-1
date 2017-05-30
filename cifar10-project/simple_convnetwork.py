@@ -5,7 +5,7 @@ from cifar10 import img_size, num_channels, num_classes
 
 # Hyperparameters
 num_epochs=20
-l2_regularization_penalty = 0.1
+l2_regularization_penalty = 0.0001
 drop_out = 0.5
 learning_rate=0.001
 decay_rate_1_moment=0.9
@@ -138,18 +138,25 @@ with tf.name_scope("fc2"):
     tf.summary.histogram("fc2", y_conv)
 # Loss function - using softmax and L2 regularization
 
-    unregularized_loss  = tf.reduce_mean(
-        tf.nn.softmax_cross_entropy_with_logits(labels=y_true, logits=y_conv))
 
-l2_loss = l2_regularization_penalty * 0.5 * (tf.nn.l2_loss(W_conv1) + 
-                                       tf.nn.l2_loss(W_conv2) +
-                                       tf.nn.l2_loss(W_fc1))
 with tf.name_scope("loss"):
-    loss = tf.add(unregularized_loss, l2_loss, name='loss')
+  regularized_loss  = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_true, logits=y_conv) +
+  (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_conv1)) +
+  (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_conv2)) +
+  (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_fc1)) + 
+  (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_fc2)))
+
+unregularized_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_true, logits=y_conv))
+# l2_loss = 0 #l2_regularization_penalty * 0.5 * (tf.nn.l2_loss(W_conv1) + 
+#              #                          tf.nn.l2_loss(W_conv2) +
+#               #                         tf.nn.l2_loss(W_fc1) +
+#               #                         tf.nn.l2_loss(W_fc2))
+# with tf.name_scope("loss"):
+#     loss = tf.add(unregularized_loss, l2_loss, name='loss')
 
 with tf.name_scope("train"):
     # Choosing optimizer
-    train_step = tf.train.AdamOptimizer(learning_rate=learning_rate, beta1=decay_rate_1_moment, beta2=decay_rate_2_moment, epsilon=epsilon, use_locking=False).minimize(loss)
+    train_step = tf.train.AdamOptimizer(learning_rate=learning_rate, beta1=decay_rate_1_moment, beta2=decay_rate_2_moment, epsilon=epsilon, use_locking=False).minimize(regularized_loss)
 
 with tf.name_scope("accuracy"):
     #Accuacy
@@ -158,41 +165,42 @@ with tf.name_scope("accuracy"):
 
 #Tensorboard
 
-loss_summary = tf.summary.scalar("loss", loss)
+loss_summary = tf.summary.scalar("loss", regularized_loss)
 training_summary  = tf.summary.scalar("training_accuracy", accuracy)
 validation_summary  = tf.summary.scalar("validation_accuracy", accuracy)
 
 
-# Start training
-sess = tf.InteractiveSession()
-sess.run(tf.global_variables_initializer())
 
-merged_summary = tf.summary.merge_all()
-writer = tf.summary.FileWriter("/GraphData/Summary")
-writer.add_graph(sess.graph)
 
-for i in range(0,4):
+# merged_summary = tf.summary.merge_all()
+# writer = tf.summary.FileWriter("/GraphData/Summary")
+# writer.add_graph(sess.graph)
+
+for i in range(0,3):
   if i == 0:
-    writer = tf.summary.FileWriter("/GraphData/Summary1")
-    l2_regularization_penalty = 0.1
+    writer = tf.summary.FileWriter("home/jhj/JupyterNotebooks/DeepLearning_Q4_2017_Projects/tesorboardData/GraphData/Summary1")
+    l2_regularization_penalty = 0.001
         #learning_rate=0.001
     #drop_out = 0.5
   if i == 1:
-    writer = tf.summary.FileWriter("/GraphData/Summary2")
-    l2_regularization_penalty = 0.05
+    writer = tf.summary.FileWriter("home/jhj/JupyterNotebooks/DeepLearning_Q4_2017_Projects/tesorboardData/GraphData/Summary2")
+    l2_regularization_penalty = 0.0001
     #learning_rate=0.0001
     #drop_out=0.4
   if i == 2:
-    writer = tf.summary.FileWriter("/GraphData/Summary3")
-    l2_regularization_penalty = 0.2
+    writer = tf.summary.FileWriter("home/jhj/JupyterNotebooks/DeepLearning_Q4_2017_Projects/tesorboardData/GraphData/Summary3")
+    l2_regularization_penalty = 0.00001
+  # Start training
+  sess = tf.InteractiveSession()
+  sess.run(tf.global_variables_initializer())
     #learning_rate=0.01
     #drop_out=0.3
-  if i == 3:
-    writer = tf.summary.FileWriter("/GraphData/Summary4")
-    l2_regularization_penalty = 0.3
+  # if i == 3:
+  #   writer = tf.summary.FileWriter("/GraphData/Summary4")
+  #   l2_regularization_penalty = 0.000001
     #learning_rate=0.1
-    #drop_out=0.6
-  print(l2_regularization_penalty)
+#    drop_out=0.6
+ # print(l2_regularization_penalty)
   for i in range(int((len(images_train)/train_batch_size) * num_epochs)):
     batch = random_batch()
     if i%100 == 0:
@@ -201,7 +209,7 @@ for i in range(0,4):
         
       #Log the cost
       cost_val, cost_summ = sess.run(
-        [loss, loss_summary],
+        [regularized_loss, loss_summary],
         feed_dict={x: batch[0], y_true: batch[1], keep_prob: 1.0})
       writer.add_summary(cost_summ, i)
 
@@ -210,15 +218,27 @@ for i in range(0,4):
           [accuracy, training_summary],
           feed_dict={x : batch[0], y_true : batch[1], keep_prob: 1.0})
       writer.add_summary(train_summ, i)
-  
+
       # To log validation accuracy.
       valid_acc, valid_summ = sess.run(
           [accuracy, validation_summary],
           feed_dict={x : images_test, y_true : labels_test, keep_prob: 1.0})
       writer.add_summary(valid_summ, i)
+
+      # print("test accuracy %g"%accuracy.eval(feed_dict={
+      # x: images_test, y_true: labels_test, keep_prob: 1.0}))
+      # print("regularized loss %g"%regularized_loss.eval(feed_dict={
+      # x: batch[0], y_true: batch[1], keep_prob: 1.0}))
+
+      # print("loss %g"%unregularized_loss.eval(feed_dict={
+      # x: batch[0], y_true: batch[1], keep_prob: 1.0}))
+      
+      # print("training accuracy %g"%accuracy.eval(feed_dict={
+      # x: batch[0], y_true: batch[1], keep_prob: 1.0}))
       
       print("step %d, training accuracy %g"%(i, train_acc))
       print("step %d, validation accuracy %g"%(i, valid_acc))
+      print("step %d, loss %g"%(i, cost_val))
         
     train_step.run(feed_dict={x: batch[0], y_true: batch[1], keep_prob: drop_out})
 

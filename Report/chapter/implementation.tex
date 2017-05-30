@@ -7,9 +7,9 @@ The implemented architecture is illustrated in figure \ref{fig:conv_arch}. The i
 \myFigure{conv_architecture.png}{Architecture of the Convolutional network}{fig:conv_arch}{1} 
 
 \section{Tensorflow}
-Tensorflow is the chosen framework for implementing this convolutional network. 
+Tensorflow is the chosen framework for implementing this convolutional network. Tensorflow is the most popular open source framework on Github for implementing machine learning algorithms \citep{ML_frameworks}. Other populars frameworks should as Keras and Tflearn both provide a higher-level API for Tensorflow. It was decided that learning how to use the Tensorflow framework would be an interesting choice.
 
-Furthermore Tensorboard is used as a visualization tool for plotting different metrics. Tensorboard is a part of the Tensorflow suite. 
+Furthermore Tensorboard is used as a visualization tool for plotting different metrics. Tensorboard is a part of the Tensorflow suite.
 
 \section{Training}
 The Cifar10 dataset contains 50.000 training images and 10.000 validation images. Training is done on the training images in batches. 
@@ -24,18 +24,18 @@ The training is executed on the CPUs of two stationary computers. This sets some
 Different hyperparameters are used when training the networks. In this project it was chosen to look specifically at learning rate, L2 regularization penalty and dropout rate. Tensorboard is used for visualization to resonate about the evaluated hyperparameters.
 
 \subsection{Learning rate}
-The learning rate is first set to the default for the AdamOptimizer specified for the Tensorflow implementation. This is specified at 0.001 \todo{Do cite}. To evaluate the learning rate, the loss is logged in Tensorboard. Looking at this visualization it can be considered whether the learning rate should be lower or higher.
+The learning rate is first set to the default settings for the ADAM algorithm specified. This is specified at 0.001 \citep{ADAM}. To evaluate the learning rate, the loss is logged in Tensorboard. Looking at this visualization it can be considered whether the learning rate should be lower or higher.
 
 
 \subsection{L2 penalty}
-First a sanity check was done for L2 penalty. First the value was set to 0.1 and after just one epoch it was obvious that the regularization was overwhelming the data loss. The regularization loss approximately contributed with $98.5\%$ of the total loss. By running more epochs it was also obvious that only the regularization was minimized because no better accuracy was achieved.
+First a sanity check was done for L2 penalty. First the value was set to 0.1 and after just one epoch it was obvious that the regularization was overwhelming the data loss. The regularization loss approximately contributed with $98.5\%$ of the total loss. By running more epochs it was also obvious that only the regularization was minimized because no better training or validation accuracy was achieved.
 
-For the choosing among different L2 penalty smaller values with deemed more feasible was chosen. A L2 penalty of 0.001, 0.0001 and 0.00001 was evaluated. To evaluate how these performed the training and validation accuracy was logged in Tensorboard to visualize the difference. By looking at the gap between training and validation accuracy it can be seen whether the network is overfitting for the training data.
+Based on the sanity check, smaller values was deemed more feasible when choosing among different L2 penalty. A L2 penalty of 0.001, 0.0001 and 0.00001 was therefore evaluated. To evaluate how these performed the training and validation accuracy was logged in Tensorboard to visualize the difference. By looking at the gap between training and validation accuracy it can be seen whether the network is overfitting for the training data \citep{NN3}.
 
 \subsection{Dropout}
 Dropout is implemented to activate a neuron only with some probability when training. Dropout values between 0,1 therefore makes sense for this.´and 0.5 is a reasonable default value. Values in this range is there evaluated.
 
-Similar to L2 penalty the gap between training and validation accuracy can be used to asses the dropout value. 
+Similar to L2 penalty the gap between training and validation accuracy can be used to asses the dropout value \citep{NN3}. 
 
 
 

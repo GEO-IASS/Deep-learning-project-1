@@ -3,6 +3,7 @@
 
 \section{Convolutional network layers}
 
+
 \subsection{Convolutional layer}
 
 \subsection{Pooling layer}
@@ -11,17 +12,40 @@
 
 
 \section{Optimization}
+Optimization is closely related to the loss function, which evaluates the quality of any particular set of weights W. When doing optimization one actually tries to find weights so that the loss function is minimized. There are many different types of optimizers, however in this course the focus will be on the chosen Adam optimizer. 
 
 \subsection{Adam optimizer}
+Adaptive Moment Estimation or \emph{Adam} is a lot like RMSProp, which is a very effective adaptive learning rate method, however with the addition of momentum. In practice Adam often works slightly better than RMSProp, and according to cs231n it is currently recommended as the default \citep{NN3}. Adam also adds bias-correction, so that when a bias is added to the weights, the optimizer takes this into account. 
 
 
 \section{Hyperparameters}
+Hyperparameters are variables set before running one's neural network. They are inputs that can be tweaked in order to optimize the model. 
+
 
 \subsection{Learning rate}
-
-\subsection{Dropout}
-
-\subsection{Stride}
+The learning rate is how quickly a network replaces old beliefs with new ones. An example could be a child learning about cars. If the first 10 cars the child sees are red, then it will believe cars are red and therefore look for red when needing to identify a car. If the child then begins seeing blue cars, then the learning rate determines how fast the child realizes that the red colour is not the most important characteristic of a car. A high learning rate results in fast realization, meaning the network will quickly change its mind. So while one would want a network that quickly can learn new characteristics, it is noteworthy that the learning rate can also be too high, which would result in fluctuating beliefs, and not make the model very precise. 
 
 \subsection{L2 regularization}
+Regularization techniques generally prevents overfitting of the training dataset. L2 regularization is one of the most common techniques. The equation for calculating L2 regularization loss for every weight in the network can be written as illustrated in (2.1). 
+
+\begin{equation}
+\dfrac{1}{2} * \lambda * \omega^2
+\end{equation}
+
+It can be read from the equation that $\omega^2$ ensures that high peaky weights are penalized heavier than diffuse weights. L2 regularization therefore encourages utilizing all inputs even though it might give the same data loss as only utilizing few inputs. Experience shows that diffuse weights yield a better result \citep{LC_cs231n}.
+
+When using L2 regularization the calculated regularization loss is added to the data loss. It is important not to overwhelm the data loss, so that the gradient primarily comes from the regularization loss instead of the data loss.
+
+
+
+\subsection{Dropout}
+Dropout is an effective and simple regularization technique, complimenting other methods, such as the L2 regularization described in the section above. 
+
+Dropout works by only keeping neurons active with a certain probability while training. So as shown in figure \ref{fig:dropout} the neurons are not necessarily all active. On the left side all neurons are active and connected, but on the right side seven of the neurons are deactivated causing less overfitting.  
+
+\myFigure{dropout.PNG}{Dropout principle \citep{NN2}}{fig:dropout}{0.6}
+
+The reason it causes less overfitting is that when the neurons used for training are varying, then the training will vary as well, meaning the model will not adapt too much to a specific belief. 
+
+
 

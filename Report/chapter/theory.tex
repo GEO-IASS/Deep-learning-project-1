@@ -3,6 +3,7 @@
 
 \section{Convolutional network layers}
 
+
 \subsection{Convolutional layer}
 
 \subsection{Pooling layer}
@@ -11,8 +12,10 @@
 
 
 \section{Optimization}
+Optimization is closely related to the loss function, which evaluates the quality of any particular set of weights W. When doing optimization one actually tries to find weights so that the loss function is minimized. There are many different types of optimizers, however in this course the focus will be on the chosen Adam optimizer. 
 
 \subsection{Adam optimizer}
+Adaptive Moment Estimation or \emph{Adam} is a lot like RMSProp, which is a very effective adaptive learning rate method, however with the addition of momentum. In practice Adam often works slightly better than RMSProp, and according to cs231n it is currently recommended as the default \citep{NN3}. Adam also adds bias-correction, so that when a bias is added to the weights, the optimizer takes this into account. 
 
 
 \section{Hyperparameters}

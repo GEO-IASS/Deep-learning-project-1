@@ -30,6 +30,11 @@ The learning rate is how quickly a network replaces old beliefs with new ones. A
 
 
 \subsection{Dropout}
+Dropout is an effective and simple regularization technique, complimenting other methods, such as the L2 regularization described in the section above. 
+
+Dropout works by only keeping neurons active with a certain probability while training. So as shown in figure \ref{fig:dropout} the neurons are not necessarily all active. On the left side all neurons are active and connected, but on the right side seven of the neurons are deactivated causing less overfitting.  
+
+\myFigure{dropout.PNG}{Dropout principle \citep{NN2}}{fig:dropout}{0.6}
 
 
 

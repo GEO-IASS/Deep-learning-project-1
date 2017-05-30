@@ -4,7 +4,7 @@ import cifar10
 from cifar10 import img_size, num_channels, num_classes
 
 # Hyperparameters
-num_epochs=0.4
+num_epochs=20
 l2_regularization_penalty = 0.0001
 drop_out = 0.5
 learning_rate=0.001
@@ -219,25 +219,26 @@ for i in range(0,3):
           feed_dict={x : batch[0], y_true : batch[1], keep_prob: 1.0})
       writer.add_summary(train_summ, i)
 
-      # # To log validation accuracy.
-      # valid_acc, valid_summ = sess.run(
-      #     [accuracy, validation_summary],
-      #     feed_dict={x : images_test, y_true : labels_test, keep_prob: 1.0})
-      # writer.add_summary(valid_summ, i)
+      # To log validation accuracy.
+      valid_acc, valid_summ = sess.run(
+          [accuracy, validation_summary],
+          feed_dict={x : images_test, y_true : labels_test, keep_prob: 1.0})
+      writer.add_summary(valid_summ, i)
 
       # print("test accuracy %g"%accuracy.eval(feed_dict={
       # x: images_test, y_true: labels_test, keep_prob: 1.0}))
-      print("regularized loss %g"%regularized_loss.eval(feed_dict={
-      x: batch[0], y_true: batch[1], keep_prob: 1.0}))
+      # print("regularized loss %g"%regularized_loss.eval(feed_dict={
+      # x: batch[0], y_true: batch[1], keep_prob: 1.0}))
 
-      print("loss %g"%unregularized_loss.eval(feed_dict={
-      x: batch[0], y_true: batch[1], keep_prob: 1.0}))
+      # print("loss %g"%unregularized_loss.eval(feed_dict={
+      # x: batch[0], y_true: batch[1], keep_prob: 1.0}))
       
-      print("training accuracy %g"%accuracy.eval(feed_dict={
-      x: batch[0], y_true: batch[1], keep_prob: 1.0}))
+      # print("training accuracy %g"%accuracy.eval(feed_dict={
+      # x: batch[0], y_true: batch[1], keep_prob: 1.0}))
       
-      #print("step %d, training accuracy %g"%(i, train_acc))
-      #print("step %d, validation accuracy %g"%(i, valid_acc))
+      print("step %d, training accuracy %g"%(i, train_acc))
+      print("step %d, validation accuracy %g"%(i, valid_acc))
+      print("step %d, loss %g"%(i, cost_val))
         
     train_step.run(feed_dict={x: batch[0], y_true: batch[1], keep_prob: drop_out})
 

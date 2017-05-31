@@ -7,6 +7,13 @@
 \subsection{Convolutional layer}
 
 \subsection{Pooling layer}
+Pooling layers are a type of layer that can be implemented in-between convolutional layers described in the section above. Their function is to down-sample the input by using a \emph{stride} and a \emph{window size} and is most often done by \emph{max pooling}. 
+
+Max pooling works by using a filter of a specific size to choose the maximum value, and thereby down-sample. The size of the filter is determined by the window size. The stride is the step size that the filter slides over the input values with. This is illustrated in figure \ref{fig:pooling}, where the stride is set to 2 and the window size is set to 2x2. The filter then moves over the input by first choosing a maximum value inside its area, so for the red area the maximum value is 6, which is then put into the new matrix. The filter will then move two steps because of the stride and then choose a new maximum value. 
+
+\myFigure{pooling.PNG}{Pooling layer \citep{NN3}}{fig:pooling}{0.5}
+
+Since the pooling layer deals in down-sampling the original input, it helps control overfitting of the data. 
 
 \subsection{Fully-connected layer}
 

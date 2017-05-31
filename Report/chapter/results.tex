@@ -1,7 +1,7 @@
 \chapter{Results}
 \label{chp:res}
 
-This chapters describes the result of the implemented convolutional neural network applied to the Cifar-10 dataset. It further shows for the adjusted hyperparameters: Learning rate, L2 Regularization and Dropouts. These three were chosen to make the scope of the project smaller, but more hyperparameters could have been evaluated if more computation power had been available.
+This chapters describes the result of the implemented convolutional neural network applied to the Cifar-10 dataset. It further presents the results of adjusting the hyperparameters: Learning rate, L2 Regularization and Dropouts.
 
 First a coarse grain search is done followed by a fine grain search
 
@@ -13,7 +13,7 @@ Based on the default learning rate of ADAM of 0.001 it was chosen to do 3 runs a
 	
 \myFigure{learningrate/loss_overview.png}{Loss function for a learning rate of 0.01, 0.001, 0.0001. Visualization from Tensorboard with some smoothing applied.}{fig:lr_loss}{1}
 
-
+\FloatBarrier
 \subsection{L2 Regularization}
 The following evaluation of L2 Regularization will be using the learning rate of 0.001. First two different L2 regularization penalties was tested: 0.01, 0.001.  The training and validation accuracy was plottet for both as illustrated in figure \ref{fig:l2pen_1_train} and \ref{fig:l2pen_1_valid}. A penalty of 0.01 showed little overfitting and both converges around 65\% but the accuracy was quite low which implies that the regularization term was overwhelming the data loss. For 0.01 the results shows quite a difference between training and validation accuracy, which implies overfitting for the training data. 
 
@@ -21,14 +21,21 @@ The following evaluation of L2 Regularization will be using the learning rate of
 
 \myFigure{l2penalty/validAcc_1}{Validation accuracy with a regularization penalty of 0.01 and 0.001. Visualization from Tensorboard with some smoothing applied.}{fig:l2pen_1_valid}{1}
 
-A value between these two  would therefore be preferable. A L2 Penalty of 0.5 was tested with model. This is illustrated in figure \ref{fig:l2pen_2}.
+A value between these two  would therefore be preferable. A L2 Penalty of 0.005 was tested with model. This is illustrated in figure \ref{fig:l2pen_2_train} and \ref{fig:l2pen_2_valid}. This gave less overfitting but a smaller validation accuracy than with 0.001. Based on the results from 0.005 the L2 penalty was lowered to 0.0025. This is also shown in figure \ref{fig:l2pen_2_train} and \ref{fig:l2pen_2_valid}. A L2 penalty of 0.0025 gave very little overfitting and approximately the same validation accuracy as 0.001. The graph might also indicate that if more epochs were being execuated a penalty of 0.0025 would yield the highest validation accuracy.
 
-\myFigure{learningrate/loss_overview.png}{Test and validation accuracy with a regularization penalty of 0.5 and 0.0025. Visualization from Tensorboard with some smoothing applied.}{fig:l2pen_2}{1}
+\myFigure{l2penalty/trainAcc_2}{Training accuracy with a regularization penalty of 0.005. Visualization from Tensorboard with some smoothing applied.}{fig:l2pen_2_train}{1}
 
+\myFigure{l2penalty/validAcc_2}{Validation accuracy with a regularization penalty of 0.005. Visualization from Tensorboard with some smoothing applied.}{fig:l2pen_2_valid}{1}
+
+
+
+\FloatBarrier
 \subsection{Dropouts}
 To further achieve less overfitting dropout can also be applied. The following dropout probabilities was evaluated 0, 0,25, 0,5 and 0,75.
 
 \section{Fine grain search}
 After finding coarse values for the hyperparameters a more fine grained search was applied. This was done with a random search were all three hyperparameters was chosen randomly in some range and then run.
+
+First a run with the parameters which were found to be most optimal in the coarse grained part. The run is instead done with 50 epochs to see if a higher validation accuracy can be achieved.
 
 

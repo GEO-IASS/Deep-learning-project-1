@@ -42,8 +42,14 @@ The learning rate is how quickly a network replaces old beliefs with new ones. A
 
 The effect of different learning rates can be seen in figure \ref{fig:learning_rates}. It is clear that the curve named \emph{good learning rate} is preferable, since it steadily approaches its minimum and flattens. The \emph{low learning rate} curve has the same tendency, however it is a lot slower and it will therefore take more time to get as good results. The \emph{high learning rate} curve reaches its minimum quickly and then flattens. However, despite initially getting a lower loss than the \emph{good learning rate} it does not reach as good a minimum in the end. The \emph{very high learning rate} curve ends up with a worse loss than it started with. This is because the parameters are bouncing around chaotically, meaning they are unable to settle in a nice spot. 
 
-\subsection{L2 regularization}
-Regularization techniques generally prevents overfitting of the training dataset. L2 regularization is one of the most common techniques. The equation for calculating L2 regularization loss for every weight in the network can be written as illustrated in (2.1). 
+\subsection{Regulariation}
+Regularization techniques generally prevents overfitting the model to the training data. The training and validation accuracy can be used to evaluate if the model is overfitting. This can be seen on figure \ref{fig:train_valid_acc}. In general there should be little difference between training and validation accuracy.
+
+\myFigure{traina_valid_acc.PNG}{training and validation accurcay in relation to overfitting \citep{NN3}}{fig:train_valid_acc}{0.5}
+
+
+\subsubsection{L2 regularization}
+L2 regularization is one of the most common regularization techniques. The equation for calculating L2 regularization loss for every weight in the network can be written as illustrated in (2.1). 
 
 \begin{equation}
 \dfrac{1}{2} * \lambda * \omega^2
@@ -51,11 +57,10 @@ Regularization techniques generally prevents overfitting of the training dataset
 
 It can be read from the equation that $\omega^2$ ensures that high peaky weights are penalized heavier than diffuse weights. L2 regularization therefore encourages utilizing all inputs even though it might give the same data loss as only utilizing few inputs. Experience shows that diffuse weights yield a better result \citep{LC_cs231n}.
 
-When using L2 regularization the calculated regularization loss is added to the data loss. It is important not to overwhelm the data loss, so that the gradient primarily comes from the regularization loss instead of the data loss.
+When using L2 regularization the calculated regularization loss is added to the data loss. It is important not to overwhelm the data loss, so that the gradient primarily comes from the regularization loss instead of the data loss. 
 
 
-
-\subsection{Dropout}
+\subsubsection{Dropout}
 Dropout is an effective and simple regularization technique, complimenting other methods, such as the L2 regularization described in the section above. 
 
 Dropout works by only keeping neurons active with a certain probability while training. So as shown in figure \ref{fig:dropout} the neurons are not necessarily all active. On the left side all neurons are active and connected, but on the right side seven of the neurons are deactivated causing less overfitting.  
@@ -63,6 +68,11 @@ Dropout works by only keeping neurons active with a certain probability while tr
 \myFigure{dropout.PNG}{Dropout principle \citep{NN2}}{fig:dropout}{0.6}
 
 The reason it causes less overfitting is that when the neurons used for training are varying, then the training will vary as well, meaning the model will not adapt too much to a specific belief. 
+
+
+
+
+
 
 
 

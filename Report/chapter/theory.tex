@@ -25,6 +25,10 @@ Hyperparameters are variables set before running one's neural network. They are 
 \subsection{Learning rate}
 The learning rate is how quickly a network replaces old beliefs with new ones. An example could be a child learning about cars. If the first 10 cars the child sees are red, then it will believe cars are red and therefore look for red when needing to identify a car. If the child then begins seeing blue cars, then the learning rate determines how fast the child realizes that the red colour is not the most important characteristic of a car. A high learning rate results in fast realization, meaning the network will quickly change its mind. So while one would want a network that quickly can learn new characteristics, it is noteworthy that the learning rate can also be too high, which would result in fluctuating beliefs, and not make the model very precise. 
 
+\myFigure{learning_rates.PNG}{Different learning rates \citep{NN3}}{fig:learning_rates}{0.5}
+
+The effect of different learning rates can be seen in figure \ref{fig:learning_rates}. It is clear that the curve named \emph{good learning rate} is preferable, since it steadily approaches its minimum and flattens. The \emph{low learning rate} curve has the same tendency, however it is a lot slower and it will therefore take more time to get as good results. The \emph{high learning rate} curve reaches its minimum quickly and then flattens. However, despite initially getting a lower loss than the \emph{good learning rate} it does not reach as good a minimum in the end. The \emph{very high learning rate} curve ends up with a worse loss than it started with. This is because the parameters are bouncing around chaotically, meaning they are unable to settle in a nice spot. 
+
 \subsection{L2 regularization}
 Regularization techniques generally prevents overfitting of the training dataset. L2 regularization is one of the most common techniques. The equation for calculating L2 regularization loss for every weight in the network can be written as illustrated in (2.1). 
 

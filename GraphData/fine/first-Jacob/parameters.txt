@@ -1,0 +1,5 @@
+num_epochs=60
+l2_regularization_penalty = 0.0019
+drop_out = 0.55
+learning_rate=0.00095
+filter size 5x5

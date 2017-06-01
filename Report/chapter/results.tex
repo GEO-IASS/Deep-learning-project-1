@@ -27,11 +27,20 @@ A value between these two  would therefore be preferable. A L2 Penalty of 0.005 
 
 \myFigure{l2penalty/validAcc_2}{Validation accuracy with a regularization penalty of 0.005. Visualization from Tensorboard with some smoothing applied.}{fig:l2pen_2_valid}{1}
 
-
-
 \FloatBarrier
 \subsection{Dropouts}
-To further achieve less overfitting dropout can also be applied. The following dropout probabilities was evaluated 0, 0,25, 0,5 and 0,75.
+To further achieve less overfitting dropout can also be applied. In general its good to combine L2 and dropout. A keep probability of 0.5 is a reasonable default, therefore in the previous executions this dropout rate was used. The following keep probabilities of 0.25, 0.5, 0.75 and 1 was also evaluated. A probability of 0.25 and 1 resulted in a lower the validation accuracy. A probability of 0.25 still ensured a low overfitting while a probability of 1 worsened the overfitting. A probability of 0.5 and 0.75 both performed better with a little higher validation accuracy and small overfitting. In figure \ref{fig:drop_1_train} and \ref{fig:drop_1_valid} the training and validation accuracy is illustrated.
+
+\myFigure{drop/train_acc.png}{Training accuracy with a dropout keep probabilities of 0.25, 0.5, 0.75 and 1. Visualization from Tensorboard with some smoothing applied.}{fig:drop_1_train}{1}
+
+\myFigure{drop/valid_acc.png}{Validation accuracy with a dropout keep probabilities of 0.25, 0.5, 0.75. Visualization from Tensorboard with some smoothing applied.}{fig:drop_1_valid}{1}
+
+\FloatBarrier
+\subsection{Convolutional layer filter size}
+Until now the convolutional layers have both used a filter size of 5x5. It will now be investigated whether a 3x3 filter might be a better choice for the model. In figure \ref{fig:filter_valid} the validation accuracy is illustrated when using filters of size 3x3 and 5x5. A filter size of 5x5 gave a little better result.
+
+\myFigure{filter/valid_acc.png}{Validation accuracy with 3x3 and 5x5 filters. Visualization from Tensorboard with some smoothing applied.}{fig:filter_valid}{1}
+
 
 \section{Fine grain search}
 After finding coarse values for the hyperparameters a more fine grained search was applied. This was done with a random search were all three hyperparameters was chosen randomly in some range and then run.

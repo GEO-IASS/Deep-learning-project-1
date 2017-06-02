@@ -43,11 +43,11 @@ Until now the convolutional layers have both used a filter size of 5x5. It will 
 
 
 \section{Fine grain search}
-After finding coarse values for the hyperparameters a more fine grained search was applied. This was done with a random search where all three hyperparameters were chosen randomly in some range and then run.
+After finding coarse values for the hyperparameters a more fine grained search was applied. Random values for all three hyperparameters were chosen for six different evaluations. The first run was done with the parameters which were found to be most optimal in the coarse grained part. The run is instead done with 60 epochs to see if a higher validation accuracy can be achieved. In general more epochs gave a better validation accuracy. During the random search some networks performing similar were found as seen in figure bla \todo{indsæt figure}. The different evaluated hyperparameters can be seen in table \ref{tbl:parameters}.
 
-First a run with the parameters which were found to be most optimal in the coarse grained part. The run is instead done with 60 epochs to see if a higher validation accuracy can be achieved. In general more epochs gave a better validation accuracy. During the random search many networks perfoming similar were found as seen below. 
 
-\begin{center}
+\begin{table}[htbp]
+	\begin{center}
 	\begin{tabular}{l  l l l l l }
 	\textbf{Run} &  \textbf{Learning rate} & \textbf{L2 penalty} &  	\textbf{Dropout} & \textbf{filter size} & \\
 		\\
@@ -63,9 +63,13 @@ First a run with the parameters which were found to be most optimal in the coars
 		\\
 		6 & 0.0001 & 0.006 & 0.5 & 3x3 \\\hline
 	\end{tabular}
-\end{center}
+	\caption{Evaluated hyperparameters}
+	\label{tbl:parameters}
+	\end{center}
+\end{table}
+
 
 \section{A deeper convolutional network}
-After evaluating hyperparameters for the convolutional network the deeper network was simply tested with the same parameters. As shown in figure bla \todo{insert figure ref}  this gave a higher validation accuracy.
+After evaluating hyperparameters for the convolutional network, the deeper network was simply tested with the same parameters. As shown in figure bla \todo{insert figure ref}  this gave a higher validation accuracy.
 
 

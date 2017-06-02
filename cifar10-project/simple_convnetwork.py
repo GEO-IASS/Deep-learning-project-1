@@ -4,10 +4,10 @@ import cifar10
 from cifar10 import img_size, num_channels, num_classes
 
 # Hyperparameters
-num_epochs=20
-l2_regularization_penalty = 0.0025
-drop_out = 0.5
-learning_rate=0.0001
+num_epochs=60
+l2_regularization_penalty = 0.0015
+drop_out = 0.6
+learning_rate=0.0005
 decay_rate_1_moment=0.9
 decay_rate_2_moment=0.999
 epsilon=1e-8
@@ -71,17 +71,15 @@ x = tf.placeholder(tf.float32, [None, img_size*img_size*num_channels])
 # true labels associated with the images that were inputted-
 y_true = tf.placeholder(tf.float32, [None, num_classes])
 
+# Reshape image to a 4d tensor before applying 1st convolution layer
+x_image = tf.reshape(x, [-1, img_size, img_size, num_channels])
 
-# First layer - compute 32 features for each 3 x3 patch
-# [ 3, 3, num_channels, 32] is [3x3, input_channels, output_cannels]
-
+# *******************************************************************
+# First convolutional layer!
 W_conv1 = weight_variable([5, 5, num_channels, 32])
 b_conv1 = bias_variable([32])
 tf.summary.histogram("W1", W_conv1)
 tf.summary.histogram("b1", b_conv1)
-
-# Reshape image to a 4d tensor before applying 1st convolution layer
-x_image = tf.reshape(x, [-1, img_size, img_size, num_channels])
 
 # Apply convolution -> Relu -> Max pooling
 conv1 = conv2d(x_image, W_conv1) + b_conv1
@@ -89,28 +87,41 @@ if(use_batch_norm):
   conv1 = tf.layers.batch_normalization(conv1, epsilon=epsilon, training=is_training)
 h_conv1 = tf.nn.relu(conv1)
 
-tf.summary.histogram("activation1", h_conv1)
-
-with tf.name_scope("conv1"):
-    h_pool1 = max_pool_2x2(h_conv1)
-
-# Second convolutional layer - 3x3 patch
-# [3, 3, 32, 64] 64 features for each 3x3 patch
-
-W_conv2 = weight_variable([5, 5, 32, 64])
-b_conv2 = bias_variable([64])
-tf.summary.histogram("W2", W_conv2)
-tf.summary.histogram("b2", b_conv2)
+# *******************************************************************
+# Second convolutional layer
+W_conv2 = weight_variable([5, 5, 32, 32])
+b_conv2 = bias_variable([32])
 
 # Apply convolutional -> Relu -> Max pooling
-h_conv2 = conv2d(h_pool1, W_conv2) + b_conv2
+h_conv2 = conv2d(h_conv1, W_conv2) + b_conv2
 if(use_batch_norm):
   h_conv2 = tf.layers.batch_normalization(h_conv2, epsilon=epsilon, training=is_training)
 h_conv2 = tf.nn.relu(h_conv2)
-tf.summary.histogram("activation2", h_conv2)
 
-with tf.name_scope("conv2"):
-    h_pool2 = max_pool_2x2(h_conv2)
+# Max pooling 2x2
+h_pool1 = max_pool_2x2(h_conv2)
+
+# *******************************************************************
+#Third convolutional layer
+W_conv3 = weight_variable([5, 5, 32, 64])
+b_conv3 = bias_variable([64])
+h_conv3 = conv2d(h_pool1, W_conv3) + b_conv3
+if(use_batch_norm):
+  h_conv2 = tf.layers.batch_normalization(h_conv3, epsilon=epsilon, training=is_training)
+h_conv3 = tf.nn.relu(h_conv3)
+
+# Fourth Convolutional layer
+
+W_conv4 = weight_variable([5, 5, 64, 64])
+b_conv4 = bias_variable([64])
+# Apply convolutional -> Relu -> Max pooling
+h_conv4 = conv2d(h_conv3, W_conv4) + b_conv4
+if(use_batch_norm):
+  h_conv4 = tf.layers.batch_normalization(h_conv4, epsilon=epsilon, training=is_training)
+h_conv4 = tf.nn.relu(h_conv4)
+
+#Max pooling 2x2
+h_pool2 = max_pool_2x2(h_conv4)
 
 # Fully connected layer with 1024 neurons
 # After pooling the images is reduced to 8 x 8, with 64 features
@@ -138,6 +149,7 @@ with tf.name_scope("fc2"):
     tf.summary.histogram("fc2", y_conv)
 # Loss function - using softmax and L2 regularization
 
+
 with tf.name_scope("loss"):
   regularized_loss  = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_true, logits=y_conv) +
   (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_conv1)) +
@@ -157,11 +169,11 @@ with tf.name_scope("accuracy"):
 #Tensorboard
 
 loss_summary = tf.summary.scalar("loss", regularized_loss)
-#training_summary  = tf.summary.scalar("training_accuracy", accuracy)
-#validation_summary  = tf.summary.scalar("validation_accuracy", accuracy)
+training_summary  = tf.summary.scalar("training_accuracy", accuracy)
+validation_summary  = tf.summary.scalar("validation_accuracy", accuracy)
 
 # merged_summary = tf.summary.merge_all()
-writer = tf.summary.FileWriter("/GraphData/learning_rate/0.0001")
+writer = tf.summary.FileWriter("/GraphData/fine/3")
 # writer.add_graph(sess.graph)
 sess = tf.InteractiveSession()
 sess.run(tf.global_variables_initializer())
@@ -173,18 +185,18 @@ for i in range(int((len(images_train)/train_batch_size) * num_epochs)):
       print("%d th epoch"%(i/(len(images_train)/train_batch_size)))
       
     #Log the cost
-    cost_val, cost_summ = sess.run(
-      [regularized_loss, loss_summary],
-      feed_dict={x: batch[0], y_true: batch[1], keep_prob: 1.0})
-    writer.add_summary(cost_summ, i)
+    # cost_val, cost_summ = sess.run(
+    #   [regularized_loss, loss_summary],
+    #   feed_dict={x: batch[0], y_true: batch[1], keep_prob: 1.0})
+    # writer.add_summary(cost_summ, i)
 
-    # # To log training accuracy.
-    # train_acc, train_summ = sess.run(
-    #     [accuracy, training_summary],
-    #     feed_dict={x : batch[0], y_true : batch[1], keep_prob: 1.0})
-    # writer.add_summary(train_summ, i)
+    # To log training accuracy.
+    train_acc, train_summ = sess.run(
+        [accuracy, training_summary],
+        feed_dict={x : batch[0], y_true : batch[1], keep_prob: 1.0})
+    writer.add_summary(train_summ, i)
 
-    # # To log validation accuracy.
+    # To log validation accuracy.
     # valid_acc, valid_summ = sess.run(
     #     [accuracy, validation_summary],
     #     feed_dict={x : images_test, y_true : labels_test, keep_prob: 1.0})
@@ -201,7 +213,7 @@ for i in range(int((len(images_train)/train_batch_size) * num_epochs)):
     # print("training accuracy %g"%accuracy.eval(feed_dict={
     #   x: batch[0], y_true: batch[1], keep_prob: 1.0}))
     
-    #print("step %d, training accuracy %g"%(i, train_acc))
+    print("step %d, training accuracy %g"%(i, train_acc))
     #print("step %d, validation accuracy %g"%(i, valid_acc))
     #print("step %d, loss %g"%(i, cost_val))
       

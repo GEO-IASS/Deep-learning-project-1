@@ -47,6 +47,24 @@ After finding coarse values for the hyperparameters a more fine grained search w
 
 First a run with the parameters which were found to be most optimal in the coarse grained part. The run is instead done with 60 epochs to see if a higher validation accuracy can be achieved. In general more epochs gave a better validation accuracy. During the random search many networks perfoming similar were found as seen below. 
 
+\begin{center}
+	\begin{tabular}{l  l l l l l }
+	\textbf{Run} &  \textbf{Learning rate} & \textbf{L2 penalty} &  	\textbf{Dropout} & \textbf{filter size} & \\
+		\\
+		1 & 0.001 & 0.0025 & 0.5 & 5x5 \\\hline
+		\\
+		2 & 0.00095 & 0.0019 & 0.55 & 5x5 \\\hline
+		\\
+		3 & 0.0008 & 0.003 & 0.6 & 3x3 \\\hline
+		\\
+		4 & 0.0002 & 0.001 & 0.5 & 3x3 \\\hline
+		\\
+		5 & 0.0001 & 0.0025 & 0.5 & 5x5 \\\hline
+		\\
+		6 & 0.0001 & 0.006 & 0.5 & 3x3 \\\hline
+	\end{tabular}
+\end{center}
+
 \section{A deeper convolutional network}
 After evaluating hyperparameters for the convolutional network the deeper network was simply tested with the same parameters. As shown in figure bla \todo{insert figure ref}  this gave a higher validation accuracy.
 

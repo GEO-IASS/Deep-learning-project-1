@@ -4,45 +4,44 @@
 \section{Architecture}
 The implemented architecture is illustrated in figure \ref{fig:conv_arch}. The inputted images are size 32x32x3. A convolutional layer is first applied following a ReLu activation function and max pooling. Then a second convolutional layer, following a ReLu activation and max pooling. At last two fully connected layers are applied with a dropout layer before the last layer. This architecture was chosen as a simple and basic network recommend in the Tensorflow documentation.
 
-\myFigure{conv_architecture.png}{Architecture of the Convolutional network}{fig:conv_arch}{1} 
+\myFigure{conv_architecture.png}{Architecture of the convolutional neural network}{fig:conv_arch}{1} 
 
-This architecture in figure \ref{fig:conv_arch} was mostly used in the exercise. Multiple trainings were done using this architecture. However a deeper network was also implemented adding two additional convolutional layers with ReLu activiation functions. This is illustrated in figure \ref{fig:conv_arch}. The computation power to do multiple runs with this architecture was not available, so a single run was used to see it could easily provide a higher validation accuracy than the more shallow network.
+This architecture in figure \ref{fig:conv_arch} was mostly used in the project. Multiple trainings were done using this architecture. However a deeper network was also implemented adding two additional convolutional layers with ReLu activiation functions. This is illustrated in figure \ref{fig:deep}. The computation power to do multiple runs with this architecture was not available, so a single run was used to see it could easily provide a higher validation accuracy, than the more shallow network.
 
-%This network was very deep and the computation power to do multiple runs with this architecture was not available. A single run using this architecture was used to see if this could easily provide a higher validation accuracy.
 
-\myFigure{deep_conv_architecture.png}{Architecture of the Convolutional network}{fig:conv_arch}{1} 
+\myFigure{deep_conv_architecture.png}{Architecture of the deeper convolutional neural network}{fig:deep}{1} 
 
 
 \section{Tensorflow}
-Tensorflow is the chosen framework for implementing the convolutional neural network. The framework is the most popular open source framework on Github for implementing machine learning algorithms \citep{ML_frameworks}. Furthermore other popular frameworks such as Keras and TFLearn both provide a higher-level API for Tensorflow. It was decided that learning how to use the Tensorflow framework would be an interesting choice.
+Tensorflow was the chosen framework for implementing the convolutional neural network. The framework is the most popular open source framework on Github for implementing machine learning algorithms \citep{ML_frameworks}. Furthermore other popular frameworks such as Keras and TFLearn both provide a higher-level API for Tensorflow. It was decided that learning how to use the Tensorflow framework would be an interesting choice.
 
-Furthermore Tensorboard is used as a visualization tool for plotting different metrics. Tensorboard is a part of the Tensorflow suite.
+Furthermore Tensorboard was used as a visualization tool for plotting different metrics. Tensorboard is a part of the Tensorflow suite.
 
 \section{Training}
-The CIFAR-10 dataset contains 50.000 training images and 10.000 validation images. Training is done on the training images in smaller batches. 
+The CIFAR-10 dataset contains 50.000 training images and 10.000 validation images. Training was done on the training images in smaller batches. 
 
-For weight initialization a simple approach is used. The weights are initialized as small values drawn from a normal distribution. The normal distribution assures symmetry breaking. For bias initialization a small constant value of 0.1 is simply used to ensure that ReLu activation functions fires.
+For weight initialization a simple approach was used. The weights were initialized as small values drawn from a normal distribution. The normal distribution assured symmetry breaking. For bias initialization a small constant value of 0.1 was simply used to ensure that ReLu activation functions fires.
 
-To find weights that minimizes the loss function, the ADAM algorithm is used. For calculating the loss a Softmax classifier is used.
+To find weights that minimizes the loss function, the ADAM algorithm was used. For calculating the loss a Softmax classifier was used.
 
-The training is executed on the CPUs of two stationary computers. This sets some boundary on complexity of the networks and epochs to run. For this project it was estimated feasible to run 20 epochs. For every 1/10th epoch the loss value, training and test accuracy is logged using Tensorboard.
+The training was executed on the CPUs of two stationary computers. This sets some boundary on complexity of the networks and epochs to run. For this project it was estimated feasible to initially run 20 epochs and later extend to 60 epochs. For every 1/10th epoch the loss value, training and test accuracy was logged using Tensorboard.
 
 \section{Visualization and tunning hyperparameters}
-Different hyperparameters are used when training the networks. In this project it was chosen to look specifically at learning rate, L2 regularization penalty, dropout rate and filter size. Tensorboard is used for visualization to resonate about the evaluated hyperparameters.
+Different hyperparameters were used when training the networks. In this project it was chosen to look specifically at learning rate, L2 regularization penalty, dropout rate and filter size. Tensorboard was used for visualization to resonate about the evaluated hyperparameters.
 
 \subsection{Learning rate}
-The learning rate is first set to the default settings for the ADAM algorithm. This is specified at 0.001 \citep{ADAM}. To evaluate the learning rate, the computed loss is logged in Tensorboard. Looking at this visualization it can be considered whether the learning rate should be lower or higher.
+The learning rate was first set to the default settings for the ADAM algorithm. This was specified at 0.001 \citep{ADAM}. To evaluate the learning rate, the computed loss was logged in Tensorboard. Looking at the slope of the loss function it was considered whether the learning rate should be lower or higher.
 
 
 \subsection{L2 penalty}
 First a sanity check was done for L2 penalty. The penalty was set to 0.1 and after just one epoch it was obvious that the regularization was overwhelming the data loss. The regularization loss approximately contributed with $98.5\%$ of the total loss. By running more epochs it was also obvious that only the regularization loss was minimized because no better training or validation accuracy was achieved.
 
-Based on the sanity check, smaller values were deemed more feasible when choosing among different L2 penalties. An L2 penalty of 0.01, 0.001 and 0.0001 was therefore tested on the network. To evaluate how these performed, the training and validation accuracy were logged in Tensorboard to visualize the difference. By looking at the gap between training and validation accuracy it can be seen whether the network is overfitting for the training data \citep{NN3}.
+Based on the sanity check, smaller values were deemed more feasible when choosing among different L2 penalties. An L2 penalty of 0.01 and 0.001 was therefore tested on the network. To evaluate how these performed, the training and validation accuracy were logged in Tensorboard to visualize the difference. By looking at the gap between training and validation accuracy it could be seen whether the network was overfitting for the training data \citep{NN3}.
 
 \subsection{Dropout}
-Dropout is implemented to activate a neuron only with some probability when training. Dropout values between 0 and 1 therefore makes sense for this and 0.5 is a reasonable default value\citep{NN3}. Following values in this range is therefore evaluated: 0.3, 0.4, 0.5, 0.6, 0.7 and 1
+Dropout is implemented to activate a neuron only with some probability when training. Dropout values between 0 and 1 therefore makes sense for this and 0.5 is a reasonable default value\citep{NN3}. Following values in this range is therefore evaluated: 0.25, 0.5, 0.75 and 1.
 
-Similar to L2 penalty the gap between training and validation accuracy can be used to asses the dropout value \citep{NN3}. 
+Similar to L2 penalty the gap between training and validation accuracy was used to asses the dropout value \citep{NN3}. 
 
 
 

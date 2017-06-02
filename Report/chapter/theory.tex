@@ -2,32 +2,33 @@
 \label{chp:theory}
 
 \section{Convolutional network layers}
-Traditional neural networks with fully-connected layers do not perform well with image classification. This is because they create the number of weights due to the size of the image. For instance if an input image is 800x600x3 (width, height, depth) the number of weights would be $800 * 600 * 3 = 1,440,000$. Due to the large number of parameters, it is easy to see that this is a wasteful technique for working with images and furthermore it will lead to an overfitting of the input images. On the other hand a Convolutional nerual network also called \emph{CNN} would be a better solution when working on image classification because it assumes that the input is an image or on the same form. The power in CNN is that the layers are three dimensional and the neurons can share weights and bias values. This reduces the amount of parameters significantly. The CNN consist of three different layers, namely a \emph{convolutional layer}, a \emph{pooling layer} and a \emph{fully-connected layer}. These three layers will be described in the following sections.
+Compared to traditional neural networks, convolutional neural networks assume images as input. One of the advantages of a convolutional neural network is that the layers are three dimensional and the neurons can share weights and bias values. This reduces the amount of parameters significantly. A convolutional neural network consists of different types of layers, the most important being the \emph{convolutional layer}, \emph{pooling layer} and \emph{fully-connected layer}. These three layers will be described in the following sections.
 
 \subsection{Convolutional layer}
-The convolutional layer is the layer where most of the processing is happening. The convolutional layer creates a number of filters with a height, a width and a depth. Normally the height and width values are either three or five. The depth should be the same as the input image. So the dimensions of a filter for a 32x32x3 input image could be 5x5x3. Each filter looks at different things in the image eg. oriented edges or colors. Each filter is convolved across the input image along the height and width. To specify how it has to convolve three hyperparameters need to be set namely \emph{depth}, \emph{stride} and \emph{zero-padding}. Depth is the number of neurons that looks at the same filter. Stride is the number of pixels the filter should convolve with across the image. Finally zero-padding is used to determine the size of the output volume. This is often the same as the input image. 
+The convolutional layer creates a number of filters with a height and a width. Normally the height and width values are either three or five \citep{FCL}. Each filter looks at a different thing in the image eg. oriented edges, or blobs of color. The filters are convolved across the input image along the height and width. The convolutional layer has three hyperparameters, namely \emph{depth}, \emph{stride} and \emph{zero-padding}. Depth is the number of filters. Stride is the number of pixels the filter should convolve with across the image. Finally zero-padding is used to determine the size of the output volume. It is often used for preserving the height and width of the input image. 
 
 \subsection{Pooling layer}
-Pooling layers are a type of layer that can be implemented in-between convolutional layers described in the section above. Their function is to down-sample the input by using a \emph{stride} and a \emph{window size} and is most often done by \emph{max pooling}. 
+Pooling layers are a type of layer that can be implemented in-between convolutional layers described in the section above. Their function is to down-sample the input by using a \emph{stride} and a \emph{filter size} and is most often done by \emph{max pooling}. 
 
-Max pooling works by using a filter of a specific size to choose the maximum value, and thereby down-sample. The size of the filter is determined by the window size. The stride is the step size that the filter slides over the input values with. This is illustrated in figure \ref{fig:pooling}, where the stride is set to 2 and the window size is set to 2x2. The filter then moves over the input by first choosing a maximum value inside its area, so for the red area the maximum value is 6, which is then put into the new matrix. The filter will then move two steps because of the stride and then choose a new maximum value. 
+Max pooling works by using a filter of a specific size to choose the maximum value, and thereby down-sample. The stride is the step size that the filter slides over the input values with. This is illustrated in figure \ref{fig:pooling}, where the stride is set to 2 and the filter size is set to 2x2. The filter then moves over the input by first choosing a maximum value inside its area, so for the red area the maximum value is 6, which is then put into the new matrix. The filter will then move two steps because of the stride. 
 
 \myFigure{pooling.PNG}{Pooling layer \citep{NN3}}{fig:pooling}{0.5}
 
 Since the pooling layer deals in down-sampling the original input, it helps control overfitting of the data. 
 
+\FloatBarrier
 \subsection{Fully-connected layer}
-A fully-connected layer is a layer where all neurons are connected to every neuron in the previous layer. In comparison, in the convolutional layer they are only connected with the neurons in the filters and the neurons in a fully-connected layer can not share parameters.
-This graphical illustration of a fully-connected layer can be seen in figure \ref{fig:fully_con}
+In a fully-connected layer all neurons are connected to every neuron in the previous layer. Furthermore the neurons in a fully-connected layer can not share parameters.
+A fully-connected layer can be seen in figure \ref{fig:fully_con}.
 
 \myFigure{fully-connected_layer.PNG}{Fully-connected layer \citep{FCL}}{fig:fully_con}{0.5}
 
 
 \section{Optimization}
-Optimization is closely related to the loss function, which evaluates the quality of any particular set of weights W. When doing optimization one actually tries to find weights so that the loss function is minimized. There are many different types of optimizers, however in this course the focus will be on the chosen Adam optimizer. 
+Optimization is closely related to the loss function, which evaluates the quality of any particular set of weights W. When doing optimization one actually tries to find weights so that the loss function is minimized. There are many different types of optimizers, however in this project the focus is on the chosen Adam optimizer. 
 
 \subsection{Adam optimizer}
-Adaptive Moment Estimation or \emph{Adam} is a lot like RMSProp, which is a very effective adaptive learning rate method, however with the addition of momentum. In practice Adam often works slightly better than RMSProp, and according to cs231n it is currently recommended as the default \citep{NN3}. Adam also adds bias-correction, so that when a bias is added to the weights, the optimizer takes this into account. 
+Adaptive Moment Estimation or \emph{Adam} is similar RMSProp since it also implements an adaptive learning rate method, however with the addition of momentum. In practice Adam often works slightly better than RMSProp, and according to cs231n it is currently recommended as the default \citep{NN3}. Adam also adds bias-correction, so that when a bias is added to the weights, the optimizer takes this into account. 
 
 
 \section{Hyperparameters}
@@ -39,12 +40,12 @@ The learning rate is how quickly a network replaces old beliefs with new ones. A
 
 \myFigure{learning_rates.PNG}{Different learning rates \citep{NN3}}{fig:learning_rates}{0.5}
 
-The effect of different learning rates can be seen in figure \ref{fig:learning_rates}. It is clear that the curve named \emph{good learning rate} is preferable, since it steadily approaches its minimum and flattens. The \emph{low learning rate} curve has the same tendency, however it is a lot slower and it will therefore take more time to get as good results. The \emph{high learning rate} curve reaches its minimum quickly and then flattens. However, despite initially getting a lower loss than the \emph{good learning rate} it does not reach as good a minimum in the end. The \emph{very high learning rate} curve ends up with a worse loss than it started with. This is because the parameters are bouncing around chaotically, meaning they are unable to settle in a nice spot. 
+The effect of different learning rates can be seen in figure \ref{fig:learning_rates}. It is clear that the curve named \emph{good learning rate} is preferable, since it steadily approaches its minimum and converges. The \emph{low learning rate} curve has the same tendency, however it is a lot slower and it will therefore take more time to get as good results. The \emph{high learning rate} curve reaches its minimum quickly and converges. However, despite initially getting a lower loss than the \emph{good learning rate} it does not reach as good a minimum in the end. The \emph{very high learning rate} curve ends up with a worse loss than it started with. This is because the parameters are bouncing around chaotically, meaning they are unable to converge. 
 
 \subsection{Regulariation}
-Regularization techniques generally prevents overfitting the model to the training data. The training and validation accuracy can be used to evaluate if the model is overfitting. This can be seen on figure \ref{fig:train_valid_acc}. In general there should be little difference between training and validation accuracy.
+Regularization techniques generally prevents overfitting the model to the training data. The training and validation accuracy can be used to evaluate if the model is overfitting. This can be seen on figure \ref{fig:train_valid_acc}. To minimize overfitting there should be little difference between training and validation accuracy.
 
-\myFigure{traina_valid_acc.PNG}{training and validation accurcay in relation to overfitting \citep{NN3}}{fig:train_valid_acc}{0.5}
+\myFigure{traina_valid_acc.PNG}{Training and validation accurcay in relation to overfitting \citep{NN3}}{fig:train_valid_acc}{0.5}
 
 
 \subsubsection{L2 regularization}
@@ -54,7 +55,7 @@ L2 regularization is one of the most common regularization techniques. The equat
 \dfrac{1}{2} * \lambda * \omega^2
 \end{equation}
 
-It can be read from the equation that $\omega^2$ ensures that high peaky weights are penalized heavier than diffuse weights. L2 regularization therefore encourages utilizing all inputs even though it might give the same data loss as only utilizing few inputs. Experience shows that diffuse weights yield a better result \citep{LC_cs231n}.
+It can be read from the equation that $\omega^2$ ensures that high peaky weights are penalized heavier than diffuse weights. L2 regularization therefore encourages utilizing all inputs even though it might give the same data loss as only utilizing a few inputs. Experience shows that diffuse weights yield a better result \citep{LC_cs231n}.
 
 When using L2 regularization the calculated regularization loss is added to the data loss. It is important not to overwhelm the data loss, so that the gradient primarily comes from the regularization loss instead of the data loss. 
 

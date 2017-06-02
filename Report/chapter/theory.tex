@@ -32,7 +32,7 @@ Adaptive Moment Estimation or \emph{Adam} is a lot like RMSProp, which is a very
 
 
 \section{Hyperparameters}
-Hyperparameters are variables set before running one's neural network. They are inputs that can be tweaked in order to optimize the model. 
+Hyperparameters are variables set before running one's neural network. They are inputs that can be tweaked in order to optimize the model. There are a lot of different hyperparameters to tweak when building a neural network, and in the following sections the hyperparameters that were focused on in this project are described. 
 
 
 \subsection{Learning rate}
@@ -69,6 +69,8 @@ Dropout works by only keeping neurons active with a certain probability while tr
 
 The reason it causes less overfitting is that when the neurons used for training are varying, then the training will vary as well, meaning the model will not adapt too much to a specific belief. 
 
+\subsubsection{Filter size}
+When modifying one's convolutional layers, one of the tweakable hyperparameters is the filter size. Popular values are 3x3 or 5x5 \citep{FCL}. The filter size has to do with how the features of images are believed to be seen. A low filter size of for example 1x1 means that the filter only looks at one value for every stride. A low filter size is good for detecting smaller features in images. However, if the small features are not interesting for the classification, then it can be better to use a larger filter size, so that it will not focus on the wrong features. 
 
 
 

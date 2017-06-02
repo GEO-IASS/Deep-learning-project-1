@@ -5,9 +5,9 @@ from cifar10 import img_size, num_channels, num_classes
 
 # Hyperparameters
 num_epochs=60
-l2_regularization_penalty = 0.0015
-drop_out = 0.6
-learning_rate=0.0005
+l2_regularization_penalty = 0.005
+drop_out = 0.5
+learning_rate=0.001
 decay_rate_1_moment=0.9
 decay_rate_2_moment=0.999
 epsilon=1e-8
@@ -154,6 +154,8 @@ with tf.name_scope("loss"):
   regularized_loss  = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_true, logits=y_conv) +
   (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_conv1)) +
   (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_conv2)) +
+  (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_conv3)) +
+  (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_conv4)) + 
   (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_fc1)) + 
   (l2_regularization_penalty * 0.5 * tf.nn.l2_loss(W_fc2)))
 
@@ -173,7 +175,7 @@ training_summary  = tf.summary.scalar("training_accuracy", accuracy)
 validation_summary  = tf.summary.scalar("validation_accuracy", accuracy)
 
 # merged_summary = tf.summary.merge_all()
-writer = tf.summary.FileWriter("/GraphData/fine/3")
+writer = tf.summary.FileWriter("/GraphData/deeper/1")
 # writer.add_graph(sess.graph)
 sess = tf.InteractiveSession()
 sess.run(tf.global_variables_initializer())
@@ -196,11 +198,11 @@ for i in range(int((len(images_train)/train_batch_size) * num_epochs)):
         feed_dict={x : batch[0], y_true : batch[1], keep_prob: 1.0})
     writer.add_summary(train_summ, i)
 
-    # To log validation accuracy.
-    # valid_acc, valid_summ = sess.run(
-    #     [accuracy, validation_summary],
-    #     feed_dict={x : images_test, y_true : labels_test, keep_prob: 1.0})
-    # writer.add_summary(valid_summ, i)
+    #To log validation accuracy.
+    valid_acc, valid_summ = sess.run(
+        [accuracy, validation_summary],
+        feed_dict={x : images_test, y_true : labels_test, keep_prob: 1.0})
+    writer.add_summary(valid_summ, i)
 
     # print("test accuracy %g"%accuracy.eval(feed_dict={
     # x: images_test, y_true: labels_test, keep_prob: 1.0}))
@@ -214,7 +216,7 @@ for i in range(int((len(images_train)/train_batch_size) * num_epochs)):
     #   x: batch[0], y_true: batch[1], keep_prob: 1.0}))
     
     print("step %d, training accuracy %g"%(i, train_acc))
-    #print("step %d, validation accuracy %g"%(i, valid_acc))
+    print("step %d, validation accuracy %g"%(i, valid_acc))
     #print("step %d, loss %g"%(i, cost_val))
       
   train_step.run(feed_dict={x: batch[0], y_true: batch[1], keep_prob: drop_out})

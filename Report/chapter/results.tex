@@ -1,7 +1,7 @@
 \chapter{Results}
 \label{chp:res}
 
-This chapters describes the result of the implemented convolutional neural network applied to the Cifar-10 dataset. It further presents the results of adjusting the hyperparameters: Learning rate, L2 Regularization and Dropouts.
+This chapter describes the result of the implemented convolutional neural network applied to the CIFAR-10 dataset. It further presents the results of adjusting the hyperparameters: Learning rate, L2 Regularization and Dropout.
 
 First a coarse grain search is done followed by a fine grain search
 
@@ -45,6 +45,9 @@ Until now the convolutional layers have both used a filter size of 5x5. It will 
 \section{Fine grain search}
 After finding coarse values for the hyperparameters a more fine grained search was applied. This was done with a random search were all three hyperparameters was chosen randomly in some range and then run.
 
-First a run with the parameters which were found to be most optimal in the coarse grained part. The run is instead done with 50 epochs to see if a higher validation accuracy can be achieved.
+First a run with the parameters which were found to be most optimal in the coarse grained part. The run is instead done with 60 epochs to see if a higher validation accuracy can be achieved. In general more epochs gave a better validation accuracy. During the random search many networks perfoming similar were found as seen below. 
+
+\section{A deeper convolutional network}
+After evaluating hyperparameters for the convolutional network the deeper network was simply tested with the same parameters. As shown in figure bla this gave a higher validation accuracy.
 
 

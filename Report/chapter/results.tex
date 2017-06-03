@@ -43,8 +43,10 @@ Until now the convolutional layers have both used a filter size of 5x5. It will 
 
 
 \section{Fine grain search}
-After finding coarse values for the hyperparameters a more fine grained search was applied. Random values for all three hyperparameters were chosen for six different evaluations. The first run was done with the parameters which were found to be most optimal in the coarse grained part. The run is instead done with 60 epochs to see if a higher validation accuracy can be achieved. In general more epochs gave a better validation accuracy. During the random search some networks performing similar were found as seen in figure bla \todo{indsæt figure}. The different evaluated hyperparameters can be seen in table \ref{tbl:parameters}.
+After finding coarse values for the hyperparameters a more fine grained search was applied. Random values for all three hyperparameters were chosen for six different evaluations. The first run was done with the parameters which were found to be most optimal in the coarse grained part. The run is instead done with 60 epochs to see if a higher validation accuracy can be achieved. In general more epochs gave a better validation accuracy. During the random search some networks performing similar were found as seen in figure \ref{fig:fine_valid}. The different evaluated hyperparameters can be seen in table \ref{tbl:parameters}.
 
+
+\myFigure{fine/valid_acc.png}{Validation accuracy for 6 different runs. Visualization from Tensorboard with some smoothing applied.}{fig:fine_valid}{1}
 
 \begin{table}[htbp]
 	\begin{center}
@@ -70,6 +72,8 @@ After finding coarse values for the hyperparameters a more fine grained search w
 
 
 \section{A deeper convolutional network}
-After evaluating hyperparameters for the convolutional network, the deeper network was simply tested with the same parameters. As shown in figure bla \todo{insert figure ref}  this gave a higher validation accuracy.
+After evaluating hyperparameters for the convolutional network, the deeper network was simply tested with the same parameters. As shown in figure \ref{fig:deep_valid} this gave a higher validation accuracy of approximately 77.5 \%.
+
+\myFigure{deep/valid_acc.png}{Validation accuracy for the second network architecture. Visualization from Tensorboard with some smoothing applied.}{fig:deep_valid}{1}
 
 
